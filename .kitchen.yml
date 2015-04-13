@@ -21,6 +21,7 @@ platforms:
 suites:
   - name: remotezk
     run_list:
+      - recipe[apt]
       - recipe[java]
       - recipe[baragon::server]
       - recipe[nginx]
@@ -30,6 +31,7 @@ suites:
         jdk_version: 7
   - name: localzk
     run_list:
+      - recipe[apt]
       - recipe[java]
       - recipe[zookeeper]
       - recipe[zookeeper::service]
