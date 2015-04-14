@@ -58,6 +58,7 @@ action :create do
 
   template "/etc/init/baragon-agent-#{new_resource.group}.conf" do
     source 'baragon-agent.init.erb'
+    cookbook 'baragon'
     owner 'root'
     group 'root'
     mode 0644
