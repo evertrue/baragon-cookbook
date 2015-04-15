@@ -1,9 +1,13 @@
 action :create do
   node.set[:baragon][:agent_yaml]['loadBalancerConfig']['name'] = new_resource.group
 
+  agent_root_path = "#{node['baragon']['agent_yaml']['loadBalancerConfig']['rootPath']}/#{new_resource.group}"
+
+  node.set[:baragon][:agent_yaml]['server']['connector']['port'] = new_resource.port
+
   # rubocop:disable Metrics/LineLength
-  ["#{node['baragon']['agent_yaml']['loadBalancerConfig']['rootPath']}/proxy",
-   "#{node['baragon']['agent_yaml']['loadBalancerConfig']['rootPath']}/upstreams"].each do |dir|
+  ["#{agent_root_path}/proxy",
+   "#{agent_root_path}/upstreams"].each do |dir|
     directory dir do
       recursive true
     end
