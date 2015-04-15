@@ -46,17 +46,18 @@ action :create do
     '/bin/true'
   end
 
+  agent_yaml = node[:baragon][:agent_yaml].to_hash
+  agent_yaml['loadBalancerConfig']['rootPath'] = agent_root_path
+
+  agent_yaml['templates'] = [node[:baragon][:proxy_template],
+                             node[:baragon][:upstream_template]]
+
   file "/etc/baragon/agent-#{new_resource.group}.yml" do
     action :create
     owner 'root'
     group 'root'
     mode 0644
-    content(YAML.dump(JSON.parse(node[:baragon][:agent_yaml].merge(
-          templates:
-            [node[:baragon][:proxy_template],
-             node[:baragon][:upstream_template]]).to_hash.to_json)
-      )
-    )
+    content(YAML.dump(agent_yaml))
     notifies :restart, "service[baragon-agent-#{new_resource.group}]"
   end
 
