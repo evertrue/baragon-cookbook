@@ -36,6 +36,14 @@ template '/etc/init/baragon-server.conf' do
             config_yaml: '/etc/baragon/service.yml'
 end
 
+logrotate_app 'baragon_server' do
+  path node[:baragon][:service_log]
+  size '100M'
+  rotate 3
+  create '644 root root'
+  options %w(missingok copytruncate)
+end
+
 service 'baragon-server' do
   provider Chef::Provider::Service::Upstart
   supports status: true,
