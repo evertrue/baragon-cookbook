@@ -55,7 +55,7 @@ logrotate_app 'baragon_server' do
   size '100M'
   rotate 3
   create '644 root root'
-  options %w(missingok copytruncate)
+  options %w(missingok copytruncate compress)
 end
 
 service 'baragon-server' do
