@@ -5,8 +5,8 @@ license          'Apache 2.0'
 description      'Installs/Configures baragon'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '2.2.1'
-issues_url       'https://github.com/evertrue/singularity-cookbook/issues'
-source_url       'https://github.com/evertrue/singularity-cookbook'
+issues_url       'https://github.com/evertrue/baragon-cookbook/issues'
+source_url       'https://github.com/evertrue/baragon-cookbook'
 
 supports 'ubuntu', '= 14.04'
 
