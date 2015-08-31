@@ -37,7 +37,7 @@ file '/etc/baragon/service.yml' do
   owner    'root'
   group    'root'
   mode     0644
-  content  YAML.dump(JSON.parse(node[:baragon][:service_yaml].to_hash.to_json))
+  content  yaml_config(node[:baragon][:service_yaml].to_hash)
   notifies :restart, 'service[baragon-server]'
 end
 
