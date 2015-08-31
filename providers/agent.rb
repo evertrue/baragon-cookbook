@@ -75,7 +75,7 @@ action :create do
     owner 'root'
     group 'root'
     mode 0644
-    content(YAML.dump(agent_yaml))
+    content yaml_config(agent_yaml)
     notifies :restart, "service[baragon-agent-#{new_resource.group}]"
   end
 
