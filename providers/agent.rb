@@ -55,23 +55,15 @@ action :create do
     agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = '/bin/true'
   end
 
-  agent_log =
-    "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
-
   file "/etc/baragon/agent-#{new_resource.group}.yml" do
     mode 0644
     content yaml_config(agent_yaml)
     notifies :restart, "service[baragon-agent-#{new_resource.group}]"
   end
 
-  template "/etc/init/baragon-agent-#{new_resource.group}.conf" do
-    source 'baragon-agent.init.erb'
-    cookbook 'baragon'
-    mode 0644
-    notifies :restart, "service[baragon-agent-#{new_resource.group}]"
-    variables config_yaml: "/etc/baragon/agent-#{new_resource.group}.yml",
-              agent_log: agent_log
-  end
+  # Configure the log file location and rotation
+  agent_log =
+    "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
 
   logrotate_app "baragon_agent_#{new_resource.group}" do
     path agent_log
@@ -79,6 +71,16 @@ action :create do
     rotate 3
     create '644 root root'
     options %w(missingok copytruncate)
+  end
+
+  # Install upstart service template and start the service
+  template "/etc/init/baragon-agent-#{new_resource.group}.conf" do
+    source 'baragon-agent.init.erb'
+    cookbook 'baragon'
+    mode 0644
+    notifies :restart, "service[baragon-agent-#{new_resource.group}]"
+    variables config_yaml: "/etc/baragon/agent-#{new_resource.group}.yml",
+              agent_log: agent_log
   end
 
   service "baragon-agent-#{new_resource.group}" do
