@@ -2,11 +2,13 @@ action :create do
 
   # Take the agent_yaml from node the attributes as a template and customize it
   agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
+  agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
 
   agent_yaml[:loadBalancerConfig][:name] = new_resource.group
   agent_yaml[:server][:connector][:port] = new_resource.port
-
-  agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
+  agent_yaml[:loadBalancerConfig][:rootPath] = agent_root_path
+  agent_yaml[:templates] = [node[:baragon][:proxy_template],
+                            node[:baragon][:upstream_template]]
 
   ["#{agent_root_path}/proxy",
    "#{agent_root_path}/upstreams"].each do |dir|
@@ -55,11 +57,6 @@ action :create do
 
   agent_log =
     "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
-
-  agent_yaml[:loadBalancerConfig][:rootPath] = agent_root_path
-
-  agent_yaml[:templates] = [node[:baragon][:proxy_template],
-                             node[:baragon][:upstream_template]]
 
   file "/etc/baragon/agent-#{new_resource.group}.yml" do
     mode 0644
