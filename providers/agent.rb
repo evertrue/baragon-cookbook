@@ -93,5 +93,36 @@ action :create do
 end
 
 action :delete do
-  fail 'Not Implemented'
+
+  agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
+  agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
+
+  service "baragon-agent-#{new_resource.group}" do
+    provider Chef::Provider::Service::Upstart
+    supports status: true,
+             restart: true
+    action [:disable, :stop]
+  end
+
+  ["/etc/baragon/agent-#{new_resource.group}.yml",
+   "/etc/init/baragon-agent-#{new_resource.group}.conf",
+   "/usr/share/java/BaragonAgentService-#{node[:baragon][:version]}-shaded.jar"].each do |f|
+    file f do
+      action :delete
+    end
+  end
+
+  ["#{agent_root_path}/proxy",
+   "#{agent_root_path}/upstreams"].each do |dir|
+    directory dir do
+      recursive true
+      action :delete
+      notifies :reload, 'service[nginx]' if node[:nginx]
+    end
+  end
+
+
+  logrotate_app "baragon_agent_#{new_resource.group}" do
+    enable false
+  end
 end
