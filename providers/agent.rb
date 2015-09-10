@@ -20,10 +20,6 @@ action :create do
     run_context.include_recipe 'baragon::build'
 
     remote_file "/usr/share/java/BaragonAgentService-#{node[:baragon][:version]}-shaded.jar" do
-      action :create
-      backup 5
-      owner 'root'
-      group 'root'
       mode 0644
       source "file://#{Chef::Config[:file_cache_path]}/Baragon/" \
              'BaragonAgentService/target/' \
@@ -66,9 +62,6 @@ action :create do
                              node[:baragon][:upstream_template]]
 
   file "/etc/baragon/agent-#{new_resource.group}.yml" do
-    action :create
-    owner 'root'
-    group 'root'
     mode 0644
     content yaml_config(agent_yaml)
     notifies :restart, "service[baragon-agent-#{new_resource.group}]"
@@ -77,8 +70,6 @@ action :create do
   template "/etc/init/baragon-agent-#{new_resource.group}.conf" do
     source 'baragon-agent.init.erb'
     cookbook 'baragon'
-    owner 'root'
-    group 'root'
     mode 0644
     notifies :restart, "service[baragon-agent-#{new_resource.group}]"
     variables config_yaml: "/etc/baragon/agent-#{new_resource.group}.yml",

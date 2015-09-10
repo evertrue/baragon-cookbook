@@ -5,10 +5,6 @@ when 'source'
   include_recipe 'baragon::build'
 
   remote_file "/usr/share/java/BaragonService-#{node[:baragon][:version]}-shaded.jar" do
-    action   :create
-    backup   5
-    owner    'root'
-    group    'root'
     mode     0644
     source   "file://#{Chef::Config[:file_cache_path]}/Baragon/BaragonService" \
              '/target/' \
@@ -33,9 +29,6 @@ node.set[:baragon][:service_yaml][:zookeeper][:zkNamespace] =
   node[:baragon][:zk_namespace]
 
 file '/etc/baragon/service.yml' do
-  action   :create
-  owner    'root'
-  group    'root'
   mode     0644
   content  yaml_config(node[:baragon][:service_yaml].to_hash)
   notifies :restart, 'service[baragon-server]'
@@ -43,8 +36,6 @@ end
 
 template '/etc/init/baragon-server.conf' do
   source    'baragon-server.init.erb'
-  owner     'root'
-  group     'root'
   mode      0644
   notifies  :restart, 'service[baragon-server]'
   variables config_yaml: '/etc/baragon/service.yml'
