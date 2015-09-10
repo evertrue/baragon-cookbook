@@ -9,6 +9,22 @@ action :create do
   agent_yaml[:templates] = [node[:baragon][:proxy_template],
                             node[:baragon][:upstream_template]]
 
+  # Set the zk hosts and namespace.  These get set in baragon::common
+  agent_yaml[:zookeeper][:quorum] = node[:baragon][:zk_hosts].join(',')
+  agent_yaml[:zookeeper][:zkNamespace] = node[:baragon][:zk_namespace]
+
+  # Set the config check command for baragon to check nginx configs
+  if node[:nginx]
+    unless node[:nginx][:binary]
+      fail "attribute :binary not found in node[:nginx]: #{node[:nginx].inspect}"
+    end
+    agent_yaml[:loadBalancerConfig][:checkConfigCommand] = "#{node[:nginx][:binary]} -t"
+    agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = "#{node[:nginx][:binary]} -s reload"
+  else
+    agent_yaml[:loadBalancerConfig][:checkConfigCommand] = '/bin/true'
+    agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = '/bin/true'
+  end
+  
   ["#{agent_root_path}/proxy",
    "#{agent_root_path}/upstreams"].each do |dir|
     directory dir do
@@ -38,22 +54,6 @@ action :create do
     end
   else
     fail "Unsupported install type: #{node[:baragon][:install_type]}"
-  end
-
-  # Set the zk hosts and namespace
-  agent_yaml[:zookeeper][:quorum] = node[:baragon][:zk_hosts].join(',')
-  agent_yaml[:zookeeper][:zkNamespace] = node[:baragon][:zk_namespace]
-
-  # Set the config check command for baragon to check nginx configs
-  if node[:nginx]
-    unless node[:nginx][:binary]
-      fail "attribute :binary not found in node[:nginx]: #{node[:nginx].inspect}"
-    end
-    agent_yaml[:loadBalancerConfig][:checkConfigCommand] = "#{node[:nginx][:binary]} -t"
-    agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = "#{node[:nginx][:binary]} -s reload"
-  else
-    agent_yaml[:loadBalancerConfig][:checkConfigCommand] = '/bin/true'
-    agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = '/bin/true'
   end
 
   file "/etc/baragon/agent-#{new_resource.group}.yml" do
