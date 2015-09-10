@@ -3,10 +3,10 @@ action :create do
   # Take the agent_yaml from node the attributes as a template and customize it
   agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
 
-  agent_yaml['loadBalancerConfig']['name'] = new_resource.group
-  agent_yaml['server']['connector']['port'] = new_resource.port
+  agent_yaml[:loadBalancerConfig][:name] = new_resource.group
+  agent_yaml[:server][:connector][:port] = new_resource.port
 
-  agent_root_path = "#{agent_yaml['loadBalancerConfig']['rootPath']}/#{new_resource.group}"
+  agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
 
   ["#{agent_root_path}/proxy",
    "#{agent_root_path}/upstreams"].each do |dir|
@@ -35,7 +35,7 @@ action :create do
     maven 'BaragonAgentService' do
       group_id 'com.hubspot'
       classifier 'shaded'
-      version node['baragon']['version']
+      version node[:baragon][:version]
       dest '/usr/share/java'
     end
   else
@@ -50,21 +50,19 @@ action :create do
     unless node[:nginx][:binary]
       fail "attribute :binary not found in node[:nginx]: #{node[:nginx].inspect}"
     end
-    agent_yaml['loadBalancerConfig']['checkConfigCommand'] =
-      "#{node[:nginx][:binary]} -t"
-    agent_yaml['loadBalancerConfig']['reloadConfigCommand'] =
-      "#{node[:nginx][:binary]} -s reload"
+    agent_yaml[:loadBalancerConfig][:checkConfigCommand] = "#{node[:nginx][:binary]} -t"
+    agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = "#{node[:nginx][:binary]} -s reload"
   else
-    agent_yaml['loadBalancerConfig']['checkConfigCommand'] = '/bin/true'
-    agent_yaml['loadBalancerConfig']['reloadConfigCommand'] = '/bin/true'
+    agent_yaml[:loadBalancerConfig][:checkConfigCommand] = '/bin/true'
+    agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = '/bin/true'
   end
 
   agent_log =
     "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
 
-  agent_yaml['loadBalancerConfig']['rootPath'] = agent_root_path
+  agent_yaml[:loadBalancerConfig][:rootPath] = agent_root_path
 
-  agent_yaml['templates'] = [node[:baragon][:proxy_template],
+  agent_yaml[:templates] = [node[:baragon][:proxy_template],
                              node[:baragon][:upstream_template]]
 
   file "/etc/baragon/agent-#{new_resource.group}.yml" do

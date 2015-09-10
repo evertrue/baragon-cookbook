@@ -20,7 +20,7 @@ when 'package'
   maven 'BaragonService' do
     group_id 'com.hubspot'
     classifier 'shaded'
-    version node['baragon']['version']
+    version node[:baragon][:version]
     dest '/usr/share/java'
   end
 else
