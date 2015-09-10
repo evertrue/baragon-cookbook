@@ -1,9 +1,12 @@
 action :create do
-  node.set[:baragon][:agent_yaml]['loadBalancerConfig']['name'] = new_resource.group
 
-  agent_root_path = "#{node['baragon']['agent_yaml']['loadBalancerConfig']['rootPath']}/#{new_resource.group}"
+  # Take the agent_yaml from node the attributes as a template and customize it
+  agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
 
-  node.set[:baragon][:agent_yaml]['server']['connector']['port'] = new_resource.port
+  agent_yaml['loadBalancerConfig']['name'] = new_resource.group
+  agent_yaml['server']['connector']['port'] = new_resource.port
+
+  agent_root_path = "#{agent_yaml['loadBalancerConfig']['rootPath']}/#{new_resource.group}"
 
   ["#{agent_root_path}/proxy",
    "#{agent_root_path}/upstreams"].each do |dir|
@@ -39,30 +42,26 @@ action :create do
     fail "Unsupported install type: #{node[:baragon][:install_type]}"
   end
 
-  node.set[:baragon][:agent_yaml][:zookeeper][:quorum] =
-    node[:baragon][:zk_hosts].join(',')
-  node.set[:baragon][:agent_yaml][:zookeeper][:zkNamespace] =
-    node[:baragon][:zk_namespace]
+  # Set the zk Settings
+  agent_yaml[:zookeeper][:quorum] = node[:baragon][:zk_hosts].join(',')
+  agent_yaml[:zookeeper][:zkNamespace] = node[:baragon][:zk_namespace]
 
   if node[:nginx]
     unless node[:nginx][:binary]
       fail "attribute :binary not found in node[:nginx]: #{node[:nginx].inspect}"
     end
-    node.set['baragon']['agent_yaml']['loadBalancerConfig']['checkConfigCommand'] =
+    agent_yaml['loadBalancerConfig']['checkConfigCommand'] =
       "#{node[:nginx][:binary]} -t"
-    node.set['baragon']['agent_yaml']['loadBalancerConfig']['reloadConfigCommand'] =
+    agent_yaml['loadBalancerConfig']['reloadConfigCommand'] =
       "#{node[:nginx][:binary]} -s reload"
   else
-    node.set['baragon']['agent_yaml']['loadBalancerConfig']['checkConfigCommand'] =
-    '/bin/true'
-    node.set['baragon']['agent_yaml']['loadBalancerConfig']['reloadConfigCommand'] =
-    '/bin/true'
+    agent_yaml['loadBalancerConfig']['checkConfigCommand'] = '/bin/true'
+    agent_yaml['loadBalancerConfig']['reloadConfigCommand'] = '/bin/true'
   end
 
   agent_log =
     "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
 
-  agent_yaml = node[:baragon][:agent_yaml].to_hash
   agent_yaml['loadBalancerConfig']['rootPath'] = agent_root_path
 
   agent_yaml['templates'] = [node[:baragon][:proxy_template],
