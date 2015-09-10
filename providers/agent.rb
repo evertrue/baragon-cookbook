@@ -1,5 +1,4 @@
 action :create do
-
   # Take the agent_yaml from node the attributes as a template and customize it
   agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
   agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
@@ -17,6 +16,7 @@ action :create do
     end
   end
 
+  # Install Baragon Agent
   case node[:baragon][:install_type]
   when 'source'
     run_context.include_recipe 'baragon::build'
@@ -40,10 +40,11 @@ action :create do
     fail "Unsupported install type: #{node[:baragon][:install_type]}"
   end
 
-  # Set the zk Settings
+  # Set the zk hosts and namespace
   agent_yaml[:zookeeper][:quorum] = node[:baragon][:zk_hosts].join(',')
   agent_yaml[:zookeeper][:zkNamespace] = node[:baragon][:zk_namespace]
 
+  # Set the config check command for baragon to check nginx configs
   if node[:nginx]
     unless node[:nginx][:binary]
       fail "attribute :binary not found in node[:nginx]: #{node[:nginx].inspect}"
