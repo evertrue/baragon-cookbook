@@ -5,14 +5,12 @@ action :create do
 
   node.set[:baragon][:agent_yaml]['server']['connector']['port'] = new_resource.port
 
-  # rubocop:disable Metrics/LineLength
   ["#{agent_root_path}/proxy",
    "#{agent_root_path}/upstreams"].each do |dir|
     directory dir do
       recursive true
     end
   end
-  # rubocop:enable Metrics/LineLength
 
   case node[:baragon][:install_type]
   when 'source'
