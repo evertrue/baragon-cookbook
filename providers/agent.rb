@@ -63,8 +63,7 @@ action :create do
   end
 
   # Configure the log file location and rotation
-  agent_log =
-    "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
+  agent_log = "#{node[:baragon][:agent_log_base]}/baragon_agent_#{new_resource.group}.log"
 
   logrotate_app "baragon_agent_#{new_resource.group}" do
     path agent_log
@@ -93,7 +92,6 @@ action :create do
 end
 
 action :delete do
-
   agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
   agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
 
@@ -120,7 +118,6 @@ action :delete do
       notifies :reload, 'service[nginx]' if node[:nginx]
     end
   end
-
 
   logrotate_app "baragon_agent_#{new_resource.group}" do
     enable false
