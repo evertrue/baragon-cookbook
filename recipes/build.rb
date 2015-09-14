@@ -3,13 +3,13 @@ directory "#{Chef::Config[:file_cache_path]}/Baragon" do
 end
 
 execute 'build_baragon' do
-  action  :nothing
   # Maven (or rather npm) has issues with
   # being run as root.
-  user    node[:baragon][:user]
-  environment(HOME: '/home/baragon')
-  command '/usr/bin/mvn clean package -DskipTests'
-  cwd     "#{Chef::Config[:file_cache_path]}/Baragon"
+  user        node[:baragon][:user]
+  environment HOME: '/home/baragon'
+  command     '/usr/bin/mvn clean package -DskipTests'
+  cwd         "#{Chef::Config[:file_cache_path]}/Baragon"
+  action      :nothing
 end
 
 package 'maven'
