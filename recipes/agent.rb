@@ -19,4 +19,6 @@
 
 # Installs a default baragon agent via the baragon_agent LWRP
 
-baragon_agent 'default'
+baragon_agent 'default' do
+  config node[:baragon][:agent_yaml].to_hash
+end

@@ -22,8 +22,8 @@ use_inline_resources
 action :create do
   run_context.include_recipe 'baragon::common'
 
-  # Take the agent_yaml from node the attributes as a template and customize it
-  agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
+  # Take the agent_yaml as a template and customize it
+  agent_yaml = new_resource.config
   agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
 
   agent_yaml[:loadBalancerConfig][:name] = new_resource.group
@@ -115,8 +115,7 @@ action :create do
 end
 
 action :delete do
-  agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
-  agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
+  agent_root_path = "#{new_resource.config[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
 
   service "baragon-agent-#{new_resource.group}" do
     provider Chef::Provider::Service::Upstart
