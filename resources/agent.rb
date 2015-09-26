@@ -18,6 +18,7 @@
 #
 
 actions :create, :delete
+default_action :create
 
 attribute :group, kind_of: String
 attribute :port, kind_of: Integer
