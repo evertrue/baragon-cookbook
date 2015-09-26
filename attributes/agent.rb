@@ -1,24 +1,24 @@
 default[:baragon][:agent_log_base] = '/var/log/baragon'
 
 default[:baragon][:agent_yaml] = {
-  'server' => {
-    'type' => 'simple',
-    'applicationContextPath' => '/baragon-agent/v2',
-    'connector' => {
-      'type' => 'http',
-      'port' => 8882
+  server: {
+    type: 'simple',
+    applicationContextPath: '/baragon-agent/v2',
+    connector: {
+      type: 'http',
+      port: 8882
     }
   },
-  'zookeeper' => {
-    'sessionTimeoutMillis' => 60_000,
-    'connectTimeoutMillis' => 5000,
-    'retryBaseSleepTimeMilliseconds' => 1_000,
-    'retryMaxTries' => 3
+  zookeeper: {
+    sessionTimeoutMillis: 60_000,
+    connectTimeoutMillis: 5000,
+    retryBaseSleepTimeMilliseconds: 1_000,
+    retryMaxTries: 3
   },
-  'loadBalancerConfig' => {
-    'name' => 'default',
-    'domain' => 'vagrant.baragon.biz',
-    'rootPath' => '/tmp'
+  loadBalancerConfig: {
+    name: 'default',
+    domain: 'vagrant.baragon.biz',
+    rootPath: '/tmp'
   }
 }
 
