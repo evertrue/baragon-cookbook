@@ -62,8 +62,7 @@ action :create do
 
     remote_file "/usr/share/java/BaragonAgentService-#{node['baragon']['version']}-shaded.jar" do
       mode 0644
-      source "file://#{Chef::Config[:file_cache_path]}/Baragon/" \
-             'BaragonAgentService/target/' \
+      source "file://#{file_cache_path('Baragon', 'BaragonAgentService', 'target')}" \
              "BaragonAgentService-#{node['baragon']['version']}-SNAPSHOT-shaded.jar"
     end
   when 'package'

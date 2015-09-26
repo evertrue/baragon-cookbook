@@ -25,8 +25,7 @@ when 'source'
 
   remote_file "/usr/share/java/BaragonService-#{node['baragon']['version']}-shaded.jar" do
     mode     0644
-    source   "file://#{Chef::Config[:file_cache_path]}/Baragon/BaragonService" \
-             '/target/' \
+    source   "file://#{file_cache_path('Baragon', 'BaragonService', 'target')}" \
              "BaragonService-#{node['baragon']['version']}-SNAPSHOT-shaded.jar"
   end
 when 'package'
