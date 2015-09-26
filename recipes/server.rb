@@ -19,15 +19,15 @@
 
 include_recipe 'baragon::common'
 
-case node[:baragon][:install_type]
+case node['baragon']['install_type']
 when 'source'
   include_recipe 'baragon::build'
 
-  remote_file "/usr/share/java/BaragonService-#{node[:baragon][:version]}-shaded.jar" do
+  remote_file "/usr/share/java/BaragonService-#{node['baragon']['version']}-shaded.jar" do
     mode     0644
     source   "file://#{Chef::Config[:file_cache_path]}/Baragon/BaragonService" \
              '/target/' \
-             "BaragonService-#{node[:baragon][:version]}-SNAPSHOT-shaded.jar"
+             "BaragonService-#{node['baragon']['version']}-SNAPSHOT-shaded.jar"
   end
 when 'package'
   include_recipe 'maven'
@@ -35,21 +35,21 @@ when 'package'
   maven 'BaragonService' do
     group_id 'com.hubspot'
     classifier 'shaded'
-    version node[:baragon][:version]
+    version node['baragon']['version']
     dest '/usr/share/java'
   end
 else
-  fail "Unsupported install type: #{node[:baragon][:install_type]}"
+  fail "Unsupported install type: #{node['baragon']['install_type']}"
 end
 
-node.set[:baragon][:service_yaml][:zookeeper][:quorum] =
-  node[:baragon][:zk_hosts].join(',')
-node.set[:baragon][:service_yaml][:zookeeper][:zkNamespace] =
-  node[:baragon][:zk_namespace]
+node.set['baragon']['service_yaml']['zookeeper']['quorum'] =
+  node['baragon']['zk_hosts'].join(',')
+node.set['baragon']['service_yaml']['zookeeper']['zkNamespace'] =
+  node['baragon']['zk_namespace']
 
 file '/etc/baragon/service.yml' do
   mode     0644
-  content  yaml_config(node[:baragon][:service_yaml].to_hash)
+  content  yaml_config(node['baragon']['service_yaml'].to_hash)
   notifies :restart, 'service[baragon-server]'
 end
 
@@ -61,7 +61,7 @@ template '/etc/init/baragon-server.conf' do
 end
 
 logrotate_app 'baragon_server' do
-  path node[:baragon][:service_log]
+  path node['baragon']['service_log']
   size '100M'
   rotate 3
   create '644 root root'

@@ -1,29 +1,29 @@
-default[:baragon][:agent_log_base] = '/var/log/baragon'
+default['baragon']['agent_log_base'] = '/var/log/baragon'
 
-default[:baragon][:agent_yaml] = {
-  server: {
-    type: 'simple',
-    applicationContextPath: '/baragon-agent/v2',
-    connector: {
-      type: 'http',
-      port: 8882
+default['baragon']['agent_yaml'] = {
+  'server' => {
+    'type' => 'simple',
+    'applicationContextPath' => '/baragon-agent/v2',
+    'connector' => {
+      'type' => 'http',
+      'port' => 8882
     }
   },
-  zookeeper: {
-    sessionTimeoutMillis: 60_000,
-    connectTimeoutMillis: 5000,
-    retryBaseSleepTimeMilliseconds: 1_000,
-    retryMaxTries: 3
+  'zookeeper' => {
+    'sessionTimeoutMillis' => 60_000,
+    'connectTimeoutMillis' => 5000,
+    'retryBaseSleepTimeMilliseconds' => 1_000,
+    'retryMaxTries' => 3
   },
-  loadBalancerConfig: {
-    name: 'default',
-    domain: 'vagrant.baragon.biz',
-    rootPath: '/tmp'
+  'loadBalancerConfig' => {
+    'name' => 'default',
+    'domain' => 'vagrant.baragon.biz',
+    'rootPath' => '/tmp'
   }
 }
 
-default[:baragon][:proxy_template][:filename] = 'proxy/%s.conf'
-default[:baragon][:proxy_template][:template] = %q(
+default['baragon']['proxy_template']['filename'] = 'proxy/%s.conf'
+default['baragon']['proxy_template']['template'] = %q(
 # This file is managed by Chef, local changes will be lost!
 #
 # Service ID: {{{service.serviceId}}}
@@ -74,8 +74,8 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
 {{/if}}
 )
 
-default[:baragon][:upstream_template][:filename] = 'upstreams/%s.conf'
-default[:baragon][:upstream_template][:template] = "
+default['baragon']['upstream_template']['filename'] = 'upstreams/%s.conf'
+default['baragon']['upstream_template']['template'] = "
 # This file is managed by Chef, local changes will be lost!
 #
 # Service ID: {{{service.serviceId}}}
