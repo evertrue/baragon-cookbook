@@ -45,7 +45,7 @@ action :create do
     agent_yaml[:loadBalancerConfig][:checkConfigCommand] = '/bin/true'
     agent_yaml[:loadBalancerConfig][:reloadConfigCommand] = '/bin/true'
   end
-  
+
   ["#{agent_root_path}/proxy",
    "#{agent_root_path}/upstreams"].each do |dir|
     directory dir do
