@@ -6,5 +6,8 @@
     "roles": [
       "zookeeper"
     ]
-  }
+  },
+  "run_list": [
+    "recipe[zookeeper]"
+  ]
 }
