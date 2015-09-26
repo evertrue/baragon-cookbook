@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+use_inline_resources
+
 action :create do
   run_context.include_recipe 'baragon::common'
 
