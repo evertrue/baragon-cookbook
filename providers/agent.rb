@@ -18,6 +18,8 @@
 #
 
 action :create do
+  run_context.include_recipe 'baragon::common'
+
   # Take the agent_yaml from node the attributes as a template and customize it
   agent_yaml = JSON.parse(node[:baragon][:agent_yaml].to_json)
   agent_root_path = "#{agent_yaml[:loadBalancerConfig][:rootPath]}/#{new_resource.group}"
