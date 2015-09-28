@@ -19,8 +19,6 @@ platforms:
 suites:
   - name: remotezk
     run_list:
-      - recipe[apt]
-      - recipe[java]
       - recipe[baragon::service]
       - recipe[nginx]
       - recipe[baragon::agent]
@@ -30,8 +28,6 @@ suites:
 
   - name: remotezk-source
     run_list:
-      - recipe[apt]
-      - recipe[java]
       - recipe[baragon::service]
       - recipe[nginx]
       - recipe[baragon::agent]
@@ -43,7 +39,6 @@ suites:
 
   - name: localzk
     run_list:
-      - recipe[java]
       - recipe[zookeeper]
       - recipe[zookeeper::service]
       - recipe[nginx]
@@ -63,8 +58,6 @@ suites:
 
   - name: localzk-source
     run_list:
-      - recipe[apt]
-      - recipe[java]
       - recipe[zookeeper]
       - recipe[zookeeper::service]
       - recipe[nginx]
