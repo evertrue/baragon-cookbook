@@ -23,3 +23,4 @@ default_action :create
 attribute :group, kind_of: String, name_attribute: true
 attribute :port, kind_of: Integer
 attribute :config, kind_of: Hash, required: true
+attribute :templates, kind_of: Array, required: true

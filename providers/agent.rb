@@ -29,8 +29,7 @@ action :create do
   agent_yaml['loadBalancerConfig']['name'] = new_resource.group
   agent_yaml['server']['connector']['port'] = new_resource.port
   agent_yaml['loadBalancerConfig']['rootPath'] = agent_root_path
-  agent_yaml['templates'] = [node['baragon']['proxy_template'],
-                             node['baragon']['upstream_template']]
+  agent_yaml['templates'] = new_resource.templates
 
   # Set the zk hosts and namespace.  These get set in baragon::common
   agent_yaml['zookeeper']['quorum'] = node['baragon']['zk_hosts'].join(',')

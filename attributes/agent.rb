@@ -22,8 +22,8 @@ default['baragon']['agent_yaml'] = {
   }
 }
 
-default['baragon']['proxy_template']['filename'] = 'proxy/%s.conf'
-default['baragon']['proxy_template']['template'] = %q(
+default['baragon']['templates']['proxy_template']['filename'] = 'proxy/%s.conf'
+default['baragon']['templates']['proxy_template']['template'] = %q(
 # This file is managed by Chef, local changes will be lost!
 #
 # Service ID: {{{service.serviceId}}}
@@ -74,8 +74,8 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
 {{/if}}
 )
 
-default['baragon']['upstream_template']['filename'] = 'upstreams/%s.conf'
-default['baragon']['upstream_template']['template'] = "
+default['baragon']['templates']['upstream_template']['filename'] = 'upstreams/%s.conf'
+default['baragon']['templates']['upstream_template']['template'] = "
 # This file is managed by Chef, local changes will be lost!
 #
 # Service ID: {{{service.serviceId}}}
