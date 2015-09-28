@@ -26,17 +26,6 @@ suites:
       java:
         jdk_version: 7
 
-  - name: remotezk-source
-    run_list:
-      - recipe[baragon::service]
-      - recipe[nginx]
-      - recipe[baragon::agent]
-    attributes:
-      java:
-        jdk_version: 7
-      baragon:
-        install_type: source
-
   - name: localzk
     run_list:
       - recipe[zookeeper]
