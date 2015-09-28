@@ -21,7 +21,7 @@ suites:
     run_list:
       - recipe[apt]
       - recipe[java]
-      - recipe[baragon::server]
+      - recipe[baragon::service]
       - recipe[nginx]
       - recipe[baragon::agent]
     attributes:
@@ -32,7 +32,7 @@ suites:
     run_list:
       - recipe[apt]
       - recipe[java]
-      - recipe[baragon::server]
+      - recipe[baragon::service]
       - recipe[nginx]
       - recipe[baragon::agent]
     attributes:
@@ -47,7 +47,7 @@ suites:
       - recipe[zookeeper]
       - recipe[zookeeper::service]
       - recipe[nginx]
-      - recipe[baragon::server]
+      - recipe[baragon::service]
       - recipe[baragon::agent]
     attributes:
       baragon:
@@ -68,7 +68,7 @@ suites:
       - recipe[zookeeper]
       - recipe[zookeeper::service]
       - recipe[nginx]
-      - recipe[baragon::server]
+      - recipe[baragon::service]
       - recipe[baragon::agent]
     attributes:
       baragon:

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: baragon
-# Recipe:: server
+# Recipe:: service
 #
 # Copyright 2014, EverTrue, Inc.
 #
