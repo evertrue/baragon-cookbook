@@ -48,7 +48,7 @@ suites:
       baragon:
         mocking: true
         zk_hosts:
-        - 'localhost:2181'
+          - 'localhost:2181'
       java:
         jdk_version: 7
       zookeeper:
@@ -65,7 +65,7 @@ suites:
       baragon:
         mocking: true
         zk_hosts:
-        - 'localhost:2181'
+          - 'localhost:2181'
         install_type: source
       java:
         jdk_version: 7
