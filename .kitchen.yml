@@ -53,8 +53,6 @@ suites:
         jdk_version: 7
       zookeeper:
         service_style: upstart
-      apt:
-        compile_time_update: true
 
   - name: localzk-source
     run_list:
@@ -73,5 +71,3 @@ suites:
         jdk_version: 7
       zookeeper:
         service_style: upstart
-      apt:
-        compile_time_update: true
