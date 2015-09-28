@@ -1,7 +1,7 @@
 # Encoding: utf-8
 require 'spec_helper'
 
-describe 'Services' do
+describe 'Baragon agent' do
   describe port(8882) do
     it { is_expected.to be_listening.with('tcp') }
   end
