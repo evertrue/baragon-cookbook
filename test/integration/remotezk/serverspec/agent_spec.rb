@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe 'Baragon agent' do
-  describe port(8882) do
-    it { is_expected.to be_listening.with('tcp') }
-  end
   describe file('/etc/baragon/agent-default.yml') do
     it { is_expected.to be_file }
 
