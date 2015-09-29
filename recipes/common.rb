@@ -22,7 +22,7 @@ node.set['java']['jdk_version'] = 7
 include_recipe 'java'
 
 user node['baragon']['user'] do
-  supports(manage_home: true)
+  supports manage_home: true
   home "/home/#{node['baragon']['user']}"
 end
 
