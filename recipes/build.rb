@@ -36,7 +36,7 @@ package 'maven'
 include_recipe 'git'
 
 git file_cache_path('Baragon') do
-  repository 'https://github.com/HubSpot/Baragon.git'
+  repository node['baragon']['git_repo_url']
   reference  node['baragon']['git_ref']
   user       node['baragon']['user']
   notifies   :run, 'execute[build_baragon]', :immediately
