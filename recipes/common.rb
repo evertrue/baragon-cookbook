@@ -23,7 +23,7 @@ include_recipe 'java'
 
 user node['baragon']['user'] do
   supports manage_home: true
-  home "/home/#{node['baragon']['user']}"
+  home node['baragon']['user_home_dir']
 end
 
 %w(/etc/baragon /var/log/baragon).each do |dir|

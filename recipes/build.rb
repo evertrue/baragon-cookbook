@@ -25,7 +25,7 @@ execute 'build_baragon' do
   # Maven (or rather npm) has issues with
   # being run as root.
   user        node['baragon']['user']
-  environment HOME: '/home/baragon'
+  environment HOME: node['baragon']['user_home_dir']
   command     '/usr/bin/mvn clean package -DskipTests'
   cwd         file_cache_path('Baragon')
   action      :nothing
