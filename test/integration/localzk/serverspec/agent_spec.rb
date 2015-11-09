@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Baragon agent' do
   it 'is listening on the specified port' do
-    expect(port 8882).to be_listening.with('tcp')
+    expect(port 8882).to be_listening
   end
 
   it 'is running and enabled' do
