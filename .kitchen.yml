@@ -22,9 +22,6 @@ suites:
       - recipe[baragon::service]
       - recipe[nginx]
       - recipe[baragon::agent]
-    attributes:
-      java:
-        jdk_version: 7
 
   - name: localzk
     run_list:
@@ -38,8 +35,6 @@ suites:
         mocking: true
         zk_hosts:
           - 'localhost:2181'
-      java:
-        jdk_version: 7
       zookeeper:
         service_style: upstart
       apt:
@@ -58,8 +53,6 @@ suites:
         zk_hosts:
           - 'localhost:2181'
         install_type: source
-      java:
-        jdk_version: 7
       zookeeper:
         service_style: upstart
       apt:
