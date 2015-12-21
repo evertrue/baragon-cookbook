@@ -22,7 +22,7 @@ default_action :create
 property :group, String, name_attribute: true
 property :port, Integer, required: true
 property :config, Hash, required: true
-property :templates, Array, required: true
+property :templates, Array
 
 action :create do
   run_context.include_recipe 'baragon::common'
@@ -34,7 +34,7 @@ action :create do
   agent_yaml['loadBalancerConfig']['name'] = group
   agent_yaml['server']['connector']['port'] = port
   agent_yaml['loadBalancerConfig']['rootPath'] = agent_root_path
-  agent_yaml['templates'] = templates
+  agent_yaml['templates'] = templates || node['baragon']['templates'].to_hash.values
 
   # Set the zk hosts and namespace.  These get set in baragon::common
   agent_yaml['zookeeper']['quorum'] = node['baragon']['zk_hosts'].join(',')
