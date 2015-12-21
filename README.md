@@ -28,25 +28,25 @@ The main requirement is that each application and upstream has its own file cont
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>[:baragon][:group_name]</tt></td>
+    <td><tt>['baragon']['group_name']</tt></td>
     <td>String</td>
     <td>Load Balancer Group Name</td>
     <td><tt>default</tt></td>
   </tr>
   <tr>
-    <td><tt>[:baragon][:proxy_conf_dir]</tt></td>
+    <td><tt>['baragon']['proxy_conf_dir']</tt></td>
     <td>String</td>
     <td>Directory where the proxy config files are placed</td>
     <td><tt>/tmp</tt></td>
   </tr>
   <tr>
-    <td><tt>[:baragon][:upstream_conf_dir]</tt></td>
+    <td><tt>['baragon']['upstream_conf_dir']</tt></td>
     <td>String</td>
     <td>Directory where the upstream config files are placed</td>
-    <td>Value of <tt>node[:baragon][:proxy_conf_dir]</tt></td>
+    <td>Value of <tt>node['baragon']['proxy_conf_dir']</tt></td>
   </tr>
   <tr>
-    <td><tt>[:baragon][:server_port]</tt></td>
+    <td><tt>['baragon']['server_port']</tt></td>
     <td>Integer</td>
     <td>Baragon service listener port</td>
     <td><tt>8080</tt></td>

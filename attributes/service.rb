@@ -1,6 +1,6 @@
-default[:baragon][:service_log] = '/var/log/baragon/baragon_service.log'
+default['baragon']['service_log'] = '/var/log/baragon/baragon_service.log'
 
-default[:baragon][:service_yaml] = {
+default['baragon']['service_yaml'] = {
   'server' => {
     'type' => 'simple',
     'applicationContextPath' => '/baragon/v2',

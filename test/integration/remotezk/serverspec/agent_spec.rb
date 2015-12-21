@@ -1,10 +1,6 @@
-# Encoding: utf-8
 require 'spec_helper'
 
-describe 'Services' do
-  describe port(8882) do
-    it { is_expected.to be_listening.with('tcp') }
-  end
+describe 'Baragon agent' do
   describe file('/etc/baragon/agent-default.yml') do
     it { is_expected.to be_file }
 
@@ -14,6 +10,7 @@ describe 'Services' do
         is_expected.to match('zookeeper-1.vagrantup.com:2181,' \
                              'zookeeper-2.vagrantup.com:2181')
       end
+      it { is_expected.to_not match '!ruby/hash:Chef::Node::Immutable' }
     end
   end
 end

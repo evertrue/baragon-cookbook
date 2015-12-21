@@ -4,5 +4,5 @@ metadata
 
 group :integration do
   cookbook 'nginx'
-  cookbook 'zookeeper', '~> 2.5'
+  cookbook 'zookeeper', '~> 3.0'
 end

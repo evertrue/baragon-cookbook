@@ -1,21 +1,21 @@
-# Encoding: utf-8
 require 'spec_helper'
 
-describe 'Services' do
-  [8088, 8882].each do |p|
-    describe port(p) do
-      it { is_expected.to be_listening.with('tcp') }
-    end
+describe 'Baragon agent' do
+  it 'is listening on the specified port' do
+    expect(port 8882).to be_listening
   end
-  describe port(2181) do
-    it { is_expected.to be_listening.with('tcp6') }
-  end
-  it 'has a running and enabled baragon-agent service' do
+
+  it 'is running and enabled' do
     expect(service('baragon-agent-default')).to be_enabled
     expect(service('baragon-agent-default')).to be_running
   end
-  it 'has a running and enabled baragon-server service' do
-    expect(service('baragon-server-default')).to be_enabled
-    expect(service('baragon-server-default')).to be_running
+
+  describe file '/etc/baragon/agent-default.yml' do
+    it { is_expected.to be_file }
+
+    describe '#content' do
+      subject { super().content }
+      it { is_expected.to_not match '!ruby/hash:Chef::Node::Immutable' }
+    end
   end
 end
