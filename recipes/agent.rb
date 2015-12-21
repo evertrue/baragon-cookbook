@@ -22,5 +22,5 @@
 baragon_agent 'default' do
   port 8882
   config node['baragon']['agent_yaml'].to_hash
-  templates node['baragon']['templates'].values
+  templates node['baragon']['templates'].to_hash.values
 end

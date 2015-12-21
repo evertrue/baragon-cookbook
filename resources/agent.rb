@@ -84,7 +84,7 @@ action :create do
 
   file "/etc/baragon/agent-#{group}.yml" do
     mode 0644
-    content yaml_config(agent_yaml)
+    content yaml_config(agent_yaml.to_hash)
     notifies :restart, "service[baragon-agent-#{new_resource.group}]"
   end
 

@@ -9,4 +9,13 @@ describe 'Baragon agent' do
     expect(service('baragon-agent-default')).to be_enabled
     expect(service('baragon-agent-default')).to be_running
   end
+
+  describe file '/etc/baragon/agent-default.yml' do
+    it { is_expected.to be_file }
+
+    describe '#content' do
+      subject { super().content }
+      it { is_expected.to_not match '!ruby/hash:Chef::Node::Immutable' }
+    end
+  end
 end
