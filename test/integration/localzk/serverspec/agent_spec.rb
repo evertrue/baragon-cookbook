@@ -16,6 +16,7 @@ describe 'Baragon agent' do
     describe '#content' do
       subject { super().content }
       it { is_expected.to_not match '!ruby/hash:Chef::Node::Immutable' }
+      it { is_expected.to match 'sessionTimeoutMillis: 50000' }
     end
   end
 end

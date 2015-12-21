@@ -27,8 +27,8 @@ property :templates, Array
 action :create do
   run_context.include_recipe 'baragon::common'
 
-  # Take the agent_yaml as a template and customize it
-  agent_yaml = config.to_hash
+  # Take the agent_yaml attribute as a template and customize it
+  agent_yaml = node['baragon']['agent_yaml'].to_hash.deep_merge config.to_hash
   agent_root_path = "#{agent_yaml['loadBalancerConfig']['rootPath']}/#{group}"
 
   agent_yaml['loadBalancerConfig']['name'] = group

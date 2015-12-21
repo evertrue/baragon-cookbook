@@ -21,5 +21,5 @@
 
 baragon_agent 'default' do
   port 8882
-  config node['baragon']['agent_yaml']
+  config 'zookeeper' => { 'sessionTimeoutMillis' => 50_000 }
 end
