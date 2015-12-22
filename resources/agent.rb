@@ -21,7 +21,7 @@ default_action :create
 
 property :group, String, name_attribute: true
 property :port, Integer, required: true
-property :config, Hash, required: true
+property :config, Hash
 property :templates, Array
 
 action :create do
