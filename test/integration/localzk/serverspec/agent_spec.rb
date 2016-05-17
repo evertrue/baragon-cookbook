@@ -1,22 +1,9 @@
-require 'spec_helper'
+require 'common/default'
 
 describe 'Baragon agent' do
-  it 'is listening on the specified port' do
-    expect(port 8882).to be_listening
-  end
+  it_behaves_like 'default installation'
 
-  it 'is running and enabled' do
-    expect(service('baragon-agent-default')).to be_enabled
-    expect(service('baragon-agent-default')).to be_running
-  end
-
-  describe file '/etc/baragon/agent-default.yml' do
-    it { is_expected.to be_file }
-
-    describe '#content' do
-      subject { super().content }
-      it { is_expected.to_not match '!ruby/hash:Chef::Node::Immutable' }
-      it { is_expected.to match 'sessionTimeoutMillis: 50000' }
-    end
+  describe port 8882 do
+    it { is_expected.to be_listening }
   end
 end
