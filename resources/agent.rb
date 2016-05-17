@@ -37,6 +37,9 @@ action :create do
   agent_yaml['loadBalancerConfig']['rootPath'] = agent_root_path
   agent_yaml['templates'] = templates || node['baragon']['templates'].to_hash.values
 
+  # Process the templates as ERB
+  agent_yaml['templates'].each { |item| item['template'] = ERB.new(item['template']).result(binding) }
+
   # Set the zk hosts and namespace.  These get set in baragon::common
   agent_yaml['zookeeper']['quorum'] = node['baragon']['zk_hosts'].join(',')
   agent_yaml['zookeeper']['zkNamespace'] = node['baragon']['zk_namespace']
