@@ -1,0 +1,36 @@
+language: ruby
+rvm: 2.2
+sudo: required
+cache:
+  apt: true
+  directories:
+  - "$HOME/.berkshelf"
+env:
+  matrix:
+  - INSTANCE: server
+  global:
+  - KITCHEN_YAML=.kitchen.cloud.yml
+  - secure: v8s5We7+lK2z2p4Lun5N53qB58wZmLd2I2PQYbBnWsX6HMbpMwLZs0CRGpEquPU5oPDF4FlGLCzB5bHnC3VrcVQGi0QjXzMk7T+BOBww9W1E7ZpUzqqVQLC7Sq0SlDhe6zA5cu5YdtTe+OeJzvArqgcJfUbXedZBnvBwj12hobzO/L8HxN9ToC3ZTBHlTFTiSB7g5RRTyYE/TNx0EphkJ7451Lrdk5zc9bzpOhSU43MSVcDVzdkBERJdro4gLP2jbhxX8HyA+w5BMUqjf1JqBtVB88RsVRsKvtTvaAFguOWWauvqqrszD3Z+nhCb01AEsT0LH+eQog4XxTFJ+PT6xS7QJjt3s4aj8MmQzrUs2JaMDAhrRr2I63CWcTqhVr7xeM9cw8TAN0KI9lounavjrEj9mnYkVsP754UaWckVDcNeo5hzuqo1I9hPobPtKTnfeF4QB8gZrKCR+DQXl8hEOtjdD8CxsUcq+SzCBmrnca9Ud4vzoXTbCdqvqlxRdB6mTRStDxT8CJ981pCzOHSsE3FT+JM6Xtk5WbV0rxvNMbeJPkVymw2msVra/FojS/8aL60QXk/7pxek4QSxsjr4ZSRCyuSPBsQaRfBDzxjozQJNjLUWqmoR8kPUI8Jd7VvyZjOyWcT6xTG54L/bUfqmM4GsUIeawrKE5d/TsXycg4Q=
+  - secure: phs6fjKGdTLG1TNqJtA1Pp3OhhiVd1pTfRWHElY7S5561l+GcVEpEqCCdf1Rw9Afx2Mch0LI/I0Sco6Ce3585Z9PpFWeEw/NvMUCXXEbaI/uYBiD6ZYPK8bzXhGwJiDUzUg31wJGBgPULq0fsSjQM47jWNxoXsxVYiQvadS+EoiUUampW+/Y8MbfBbznDTiMhmLHhztb+MquZALtcke4gCio6vxGO/mqMAStVPz0vskJ7ctdVnzxJ47EC6MelDAq1Vk4I6itvtz1wQNrx6mRvatfGBoa9SrekjXfsQg1r0laXeirTo9PoU4qa8n7HeS7FE5Y83v2nu7S0M5+Zz7Qxxa1aKOJl3KWSIJrD1L9g3mEJqyq3ouONWRMsPLVURQ0WGBYic9iIwFsadSZQ+316YjvQvq+1nlJ970bL4AO16ytqjkHXslATeAUSJ1z9SRwXmSXbznMykCWS0ngIFALixPKtN423FsXg8wGX6FAUPu2qG/1FoEGmoFhCg9uvZkMwtHkf0C4x8kAGLY6gtmE97ic2e1VQ50R0L0BHrLH4r9Uu2G+H4nSkBB7zk+UwaxMdL+/KFkUpCCIMsgAEZBUHVSE6LuOy5oOX5vDFetXdZWZRv7QSr5ky2/ZqcQwaTK86YCnhvJPprk60lHY6pWA6d+y4XyAXlk/3LWCGQ1Youw=
+before_install:
+- openssl aes-256-cbc -K $encrypted_c35f1d91663f_key -iv $encrypted_c35f1d91663f_iv
+  -in travis_ci_ec2.pem.enc -out ~/.ssh/travis_ci_ec2.pem -d
+- mkdir ~/.chef
+- echo 'node_name "trubot"' >> ~/.chef/knife.rb
+- chmod 600 ~/.ssh/travis_ci_ec2.pem
+- cp ~/.ssh/travis_ci_ec2.pem ~/.ssh/id_rsa
+- curl -L https://www.opscode.com/chef/install.sh | sudo bash -s -- -P chefdk
+install:
+- eval "$(chef shell-init bash)"
+- chef gem install kitchen-ec2 kitchen-sync
+- berks
+before_script:
+- rubocop --version
+- foodcritic --version
+script:
+- rubocop
+- foodcritic .
+- kitchen test ${INSTANCE} -d always
+notifications:
+  slack:
+    secure: CBMLEHgq9ckCc+odhjTYhYz+1J/k/ediarv9dCNEpequR/3eiZgPBP7JIK6X5GYfy8Kv3zxswShPAteA1qnPY1RemFx0NORJiv4VGmo/479DF1C1tdqMAcy3qv1IF08X55U3CuuixHqgwjz8Lf3SD+dOY+CRhQpDXsj74nHR37Qo5+T5VY9Gdgib5g988nY389iDuwCy1I6s3M+1vr5a9M2beobp+va2XKgpSNPOe8cnZeB6Wbt/wpycbHlQGt5FCu7OmN9OJqX+UPsFSqVbTZBX0k1FLapJXCFLMzGDQFivuU27nTPTt8pp3vFdXMFMxtl92Pgt9Ksc0XomRh8ZrGhXL1Ye8R+0AiXhGEEJn/Z7+Ke4O2PUzMwD463stUaZTkmIWF68igJip91oJK1Y5/tIC8Dz3+ipeZQ5fpmqwC/cMq0AamH79pjoVs27Tui0+kdVM3WBWCoR1VbqkhcY6l9z7QdNv5x4Ti9X37PrFicoq6XdyJRJC6eX40sunagSVdDTHRLCULjJ1GsXN2/D8CxFC78W2uRM6EVOMx4Hy7+C2AaYz1Slt1AE5LRONnerqAe0Sj5BB0+mGp5BsigEWkdiXwsZQW9EtRD/wMBr6S1sFkcJjgAZ+qodUcARRPi5Ogr9SE6gcNJZhaIQBFDfreslXrCShFDP3gevfFkpanE=
