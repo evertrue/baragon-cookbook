@@ -30,6 +30,7 @@ suites:
       - recipe[nginx]
       - recipe[baragon::service]
       - recipe[baragon::agent]
+      - recipe[test_baragon_lb::default]
     attributes:
       baragon:
         mocking: true
@@ -47,6 +48,7 @@ suites:
       - recipe[nginx]
       - recipe[baragon::service]
       - recipe[baragon::agent]
+      - recipe[test_baragon_lb::default]
     attributes:
       baragon:
         mocking: true
