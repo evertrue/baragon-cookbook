@@ -54,7 +54,7 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
   {{#if service.options.nginxProxyPassOverride}}
   proxy_pass http://{{{service.options.nginxProxyPassOverride}}};
   {{else}}
-  proxy_pass http://baragon_{{{service.serviceId}}};
+  proxy_pass http://baragon_<%= group %>_{{{service.serviceId}}};
   {{/if}}
   proxy_connect_timeout {{firstOf service.options.nginxProxyConnectTimeout 55}};
   proxy_read_timeout {{firstOf service.options.nginxProxyReadTimeout 60}};
@@ -89,7 +89,7 @@ default['baragon']['templates']['upstream_template']['template'] = "
 {{/if}}
 
 {{#if upstreams}}
-upstream baragon_{{{service.serviceId}}} {
+upstream baragon_<%= group %>_{{{service.serviceId}}} {
   {{#each upstreams}}server {{{upstream}}};  # {{{requestId}}}
   {{/each}}
   {{#if service.options.nginxExtraUpstreamConfigs}}
