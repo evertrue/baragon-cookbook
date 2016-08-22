@@ -76,6 +76,11 @@ action :create do
   when 'package'
     run_context.include_recipe 'maven'
 
+    # TODO: Make this only run when needed
+    execute 'update ca certificates' do
+      command 'update-ca-certificates -f'
+    end
+
     maven 'BaragonAgentService' do
       group_id 'com.hubspot'
       classifier 'shaded'
