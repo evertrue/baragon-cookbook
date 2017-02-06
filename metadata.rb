@@ -4,7 +4,7 @@ maintainer_email 'devops@evertrue.com'
 license          'Apache 2.0'
 description      'Installs/Configures baragon'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '5.0.1'
+version          '5.0.2'
 issues_url       'https://github.com/evertrue/baragon-cookbook/issues'
 source_url       'https://github.com/evertrue/baragon-cookbook'
 
