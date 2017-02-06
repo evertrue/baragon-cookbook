@@ -14,5 +14,8 @@ default['baragon']['service_yaml'] = {
     'connectTimeoutMillis' => 5_000,
     'retryBaseSleepTimeMilliseconds' => 1_000,
     'retryMaxTries' => 3
+  },
+  'history' => {
+    'purgeOldRequests' => true
   }
 }
