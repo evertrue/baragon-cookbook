@@ -76,6 +76,11 @@ action :create do
   when 'package'
     run_context.include_recipe 'maven'
 
+    execute 'update-ca-certificates' do
+      command 'update-ca-certificates -f'
+      only_if { node['platform_version'].to_i < 16 }
+    end
+
     maven 'BaragonAgentService' do
       group_id 'com.hubspot'
       classifier 'shaded'
