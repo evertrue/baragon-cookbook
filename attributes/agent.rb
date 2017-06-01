@@ -24,7 +24,7 @@ default['baragon']['agent_yaml'] = {
 
 default['baragon']['templates']['proxy_template']['filename'] = 'proxy/%s.conf'
 default['baragon']['templates']['proxy_template']['template'] = %q(
-# This file is managed by Chef, local changes will be lost!
+# This file is managed by Chef and Baragon, local changes will be lost!
 #
 # Service ID: {{{service.serviceId}}}
 # Service base path: {{{service.serviceBasePath}}}

@@ -52,11 +52,18 @@ file '/etc/baragon/service.yml' do
   notifies :restart, 'service[baragon-server]'
 end
 
-template '/etc/init/baragon-server.conf' do
-  source    'baragon-server.init.erb'
-  mode      0644
-  notifies  :restart, 'service[baragon-server]'
-  variables config_yaml: '/etc/baragon/service.yml'
+if node['platform_version'].to_i < 16
+  template '/etc/init/baragon-server.conf' do
+    source    'upstart/baragon-server.init.erb'
+    notifies  :restart, 'service[baragon-server]'
+    variables config_yaml: '/etc/baragon/service.yml'
+  end
+else
+  template '/etc/systemd/system/baragon-server.service' do
+    source    'systemd/baragon-server.service.erb'
+    notifies  :restart, 'service[baragon-server]'
+    variables config_yaml: '/etc/baragon/service.yml'
+  end
 end
 
 logrotate_app 'baragon_server' do
@@ -68,7 +75,11 @@ logrotate_app 'baragon_server' do
 end
 
 service 'baragon-server' do
-  provider Chef::Provider::Service::Upstart
+  if node['platform_version'].to_i < 16
+    provider Chef::Provider::Service::Upstart
+  else
+    provider Chef::Provider::Service::Systemd
+  end
   supports status: true,
            restart: true
   action   [:enable, :start]
