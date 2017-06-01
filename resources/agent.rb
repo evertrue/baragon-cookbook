@@ -104,17 +104,31 @@ action :create do
   end
 
   # Install upstart service template and start the service
-  template "/etc/init/baragon-agent-#{group}.conf" do
-    source 'baragon-agent.init.erb'
-    cookbook 'baragon'
-    mode 0644
-    notifies :restart, "service[baragon-agent-#{new_resource.group}]"
-    variables config_yaml: "/etc/baragon/agent-#{new_resource.group}.yml",
-              agent_log: agent_log
+  if node['platform_version'].to_i < 16
+    template "/etc/init/baragon-agent-#{group}.conf" do
+      source 'upstart/baragon-agent.init.erb'
+      cookbook 'baragon'
+      notifies :restart, "service[baragon-agent-#{new_resource.group}]"
+      variables config_yaml: "/etc/baragon/agent-#{new_resource.group}.yml",
+                agent_log: agent_log
+    end
+  else
+    template "/etc/systemd/system/baragon-agent-#{group}.service" do
+      source 'systemd/baragon-agent.service.erb'
+      cookbook 'baragon'
+      notifies :restart, "service[baragon-agent-#{new_resource.group}]"
+      variables config_yaml: "/etc/baragon/agent-#{new_resource.group}.yml",
+                agent_log: agent_log,
+                group: group
+    end
   end
 
   service "baragon-agent-#{group}" do
-    provider Chef::Provider::Service::Upstart
+    if node['platform_version'].to_i < 16
+      provider Chef::Provider::Service::Upstart
+    else
+      provider Chef::Provider::Service::Systemd
+    end
     supports status: true,
              restart: true
     action [:enable, :start]
@@ -125,7 +139,11 @@ action :delete do
   agent_root_path = "#{config['loadBalancerConfig']['rootPath']}/#{group}"
 
   service "baragon-agent-#{group}" do
-    provider Chef::Provider::Service::Upstart
+    if node['platform_version'].to_i < 16
+      provider Chef::Provider::Service::Upstart
+    else
+      provider Chef::Provider::Service::Systemd
+    end
     supports status: true,
              restart: true
     action [:disable, :stop]

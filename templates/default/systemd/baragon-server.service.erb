@@ -1,0 +1,16 @@
+[Unit]
+Description=Baragon Server Service
+After=network.target
+After=systemd-user-sessions.service
+After=network-online.target
+ 
+[Service]
+ExecStart=<%= node['java']['java_home'] %>/bin/java -Xmx512m -Djava.net.preferIPv4Stack=true -jar /usr/share/java/BaragonService-<%= node['baragon']['version'] %>-shaded.jar server <%= @config_yaml %>
+TimeoutSec=30
+Restart=on-failure
+RestartSec=30
+StartLimitInterval=350
+StartLimitBurst=10
+ 
+[Install]
+WantedBy=multi-user.target
