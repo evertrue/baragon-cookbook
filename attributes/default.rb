@@ -7,4 +7,4 @@ default['baragon']['git_ref'] = 'Baragon-0.5.0'
 default['baragon']['git_repo_url'] = 'https://github.com/HubSpot/Baragon.git'
 default['baragon']['install_type'] = 'package'
 
-default['java']['jdk_version'] = 7
+default['java']['jdk_version'] = 8
