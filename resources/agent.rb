@@ -78,7 +78,6 @@ action :create do
 
     execute 'update-ca-certificates' do
       command 'update-ca-certificates -f'
-      only_if { node['platform_version'].to_i < 16 }
     end
 
     maven 'BaragonAgentService' do
