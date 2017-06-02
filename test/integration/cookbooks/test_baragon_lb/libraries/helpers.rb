@@ -5,6 +5,11 @@ module Baragon
 
       return if test_request_exist?
 
+      # Wait for the agent to come online and check in
+      sleep 0.25 until JSON.parse(
+        Net::HTTP.get(URI('http://localhost:8088/baragon/v2/load-balancer/default/agents'))
+      ).any?
+
       lb_request = {
         'loadBalancerRequestId' => "lbreq-#{Time.now.to_i}",
         'loadBalancerService' => {
