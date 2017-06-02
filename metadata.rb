@@ -8,7 +8,7 @@ version          '5.0.2'
 issues_url       'https://github.com/evertrue/baragon-cookbook/issues'
 source_url       'https://github.com/evertrue/baragon-cookbook'
 
-supports 'ubuntu', '= 14.04'
+supports 'ubuntu', '>= 14.04'
 
 depends 'java'
 depends 'git'
