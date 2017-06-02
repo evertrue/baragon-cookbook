@@ -18,31 +18,17 @@
 #
 
 include_recipe 'baragon::common'
+include_recipe 'maven'
 
-case node['baragon']['install_type']
-when 'source'
-  include_recipe 'baragon::build'
+execute 'update-ca-certificates' do
+  command 'update-ca-certificates -f'
+end
 
-  remote_file "/usr/share/java/BaragonService-#{node['baragon']['version']}-shaded.jar" do
-    mode     0644
-    source   "file://#{file_cache_path('Baragon', 'BaragonService', 'target')}" \
-             "BaragonService-#{node['baragon']['version']}-SNAPSHOT-shaded.jar"
-  end
-when 'package'
-  include_recipe 'maven'
-
-  execute 'update-ca-certificates' do
-    command 'update-ca-certificates -f'
-  end
-
-  maven 'BaragonService' do
-    group_id 'com.hubspot'
-    classifier 'shaded'
-    version node['baragon']['version']
-    dest '/usr/share/java'
-  end
-else
-  fail "Unsupported install type: #{node['baragon']['install_type']}"
+maven 'BaragonService' do
+  group_id 'com.hubspot'
+  classifier 'shaded'
+  version node['baragon']['version']
+  dest '/usr/share/java'
 end
 
 node.set['baragon']['service_yaml']['zookeeper']['quorum'] =

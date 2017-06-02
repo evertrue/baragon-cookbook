@@ -64,30 +64,17 @@ action :create do
   end
 
   # Install Baragon Agent
-  case node['baragon']['install_type']
-  when 'source'
-    run_context.include_recipe 'baragon::build'
+  run_context.include_recipe 'maven'
 
-    remote_file "/usr/share/java/BaragonAgentService-#{node['baragon']['version']}-shaded.jar" do
-      mode 0644
-      source "file://#{file_cache_path('Baragon', 'BaragonAgentService', 'target')}" \
-             "BaragonAgentService-#{node['baragon']['version']}-SNAPSHOT-shaded.jar"
-    end
-  when 'package'
-    run_context.include_recipe 'maven'
+  execute 'update-ca-certificates' do
+    command 'update-ca-certificates -f'
+  end
 
-    execute 'update-ca-certificates' do
-      command 'update-ca-certificates -f'
-    end
-
-    maven 'BaragonAgentService' do
-      group_id 'com.hubspot'
-      classifier 'shaded'
-      version node['baragon']['version']
-      dest '/usr/share/java'
-    end
-  else
-    fail "Unsupported install type: #{node['baragon']['install_type']}"
+  maven 'BaragonAgentService' do
+    group_id 'com.hubspot'
+    classifier 'shaded'
+    version node['baragon']['version']
+    dest '/usr/share/java'
   end
 
   file "/etc/baragon/agent-#{group}.yml" do
