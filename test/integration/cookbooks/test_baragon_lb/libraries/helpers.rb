@@ -17,7 +17,7 @@ module Baragon
         'addUpstreams' => [{
           'upstream' => 'localhost:8123',
           'requestId' => "upstreamreq-#{Time.now.to_i}",
-          'rackId' => 'us-east-1a',
+          'rackId' => 'us-east-1b',
           'group' => 'default'
         }],
         'removeUpstreams' => []
