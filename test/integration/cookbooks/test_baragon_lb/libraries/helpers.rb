@@ -28,6 +28,8 @@ module Baragon
         'removeUpstreams' => []
       }
 
+      puts "\nWriting request: upstreamreq-#{Time.now.to_i}"
+
       uri = URI 'http://localhost:8088/baragon/v2/request'
       req = Net::HTTP::Post.new uri
       req.body = lb_request.to_json
@@ -44,7 +46,7 @@ module Baragon
         Net::HTTP.get_response(URI('http://localhost:8088/baragon/v2/state/tk-test-service'))
                  .code.to_i == 200
       rescue Errno::ECONNREFUSED => e
-        Chef::Log.info "Baragon connection refused. Retrying (#{tries})."
+        puts "Baragon connection refused. Retrying (#{tries})."
         # The Baragon service doesn't necessarily start up instantly at bootstrap
         tries += 1
         sleep 1
