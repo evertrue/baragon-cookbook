@@ -1,12 +1,20 @@
 ---
 driver:
-  name: vagrant
-  customize:
-    cpus: 4
-    memory: 1536
-  network:
-    - - private_network
-      - ip: '192.168.33.10'
+  name: ec2
+  require_chef_omnibus: 12.17.44
+  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
+  region: us-east-1
+  availability_zone: us-east-1b
+  security_group_ids: ['ci-testing']
+  instance_type: c3.large
+  iam_profile_name: nginx-lb
+  tags:
+    Env: public
+    Type: test
+
+transport:
+  name: sftp
+  ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
 
 provisioner:
   name: chef_zero
