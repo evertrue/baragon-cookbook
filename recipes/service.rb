@@ -31,6 +31,10 @@ when 'source'
 when 'package'
   include_recipe 'maven'
 
+  execute 'update-ca-certificates' do
+    command 'update-ca-certificates -f'
+  end
+
   maven 'BaragonService' do
     group_id 'com.hubspot'
     classifier 'shaded'
