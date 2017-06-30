@@ -51,6 +51,7 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
   proxy_set_header X-RealIP $remote_addr;
   proxy_set_header X-Scheme $scheme;
   proxy_set_header X-Request-Start "${msec}";
+  proxy_set_header Strict-Transport-Security "max-age=31536000; includeSubDomains;";
   {{#if service.options.nginxProxyPassOverride}}
   proxy_pass http://{{{service.options.nginxProxyPassOverride}}};
   {{else}}
