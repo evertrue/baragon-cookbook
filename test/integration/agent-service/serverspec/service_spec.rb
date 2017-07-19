@@ -10,9 +10,3 @@ describe 'BaragonService' do
     expect(service('baragon-server')).to be_running
   end
 end
-
-describe 'ZooKeeper' do
-  it 'is listening on the specified port' do
-    expect(port 2181).to be_listening.with('tcp6')
-  end
-end
