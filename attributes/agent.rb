@@ -52,6 +52,9 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
   proxy_set_header X-Scheme $scheme;
   proxy_set_header X-Request-Start "${msec}";
   add_header Strict-Transport-Security $strict_transport_security_custom_header always;
+  add_header Cache-Control $cache_control_custom_header always;
+  add_header Pragma $pragma_custom_header always;
+
   {{#if service.options.nginxProxyPassOverride}}
   proxy_pass http://{{{service.options.nginxProxyPassOverride}}};
   {{else}}
