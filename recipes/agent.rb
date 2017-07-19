@@ -17,6 +17,13 @@
 # limitations under the License.
 #
 
+# The way that we use add_header below necessitates this requirement. In Ubuntu < 16 nginx still
+# tries to add the header even if the set value is an empty string (which breaks the `map` logic
+# we use here).
+#
+# This weird trick is described here: https://serverfault.com/a/598106
+fail 'This cookbook no longer supports Ubuntu < 16' unless node['platform_version'].to_i >= 16
+
 # Installs a default baragon agent via the baragon_agent LWRP
 
 baragon_agent 'default' do
