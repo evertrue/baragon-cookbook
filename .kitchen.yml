@@ -20,19 +20,20 @@ provisioner:
   name: chef_zero
   client_rb:
     environment: dev
+  attributes:
+    baragon:
+      mocking: true
+      zk_hosts:
+        - 'localhost:2181'
+    apt:
+      compile_time_update: true
 
 platforms:
   - name: ubuntu-14.04
   - name: ubuntu-16.04
 
 suites:
-  - name: remotezk
-    run_list:
-      - recipe[baragon::service]
-      - recipe[nginx]
-      - recipe[baragon::agent]
-
-  - name: localzk
+  - name: agent-service
     run_list:
       - recipe[apt]
       - recipe[zookeeper_minimal]
@@ -40,10 +41,14 @@ suites:
       - recipe[baragon::service]
       - recipe[baragon::agent]
       - recipe[test_baragon_lb::default]
-    attributes:
-      baragon:
-        mocking: true
-        zk_hosts:
-          - 'localhost:2181'
-      apt:
-        compile_time_update: true
+    includes:
+      - ubuntu-16.04
+  # We keep this service-only suite around so that we can test the service on 14.04 (the agent
+  # recipe no longer supports < 16.04)
+  - name: service-only
+    run_list:
+      - recipe[apt]
+      - recipe[zookeeper_minimal]
+      - recipe[baragon::service]
+    includes:
+      - ubuntu-14.04
