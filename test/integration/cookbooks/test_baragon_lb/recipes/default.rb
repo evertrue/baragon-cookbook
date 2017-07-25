@@ -1,3 +1,13 @@
+baragon_agent 'default' do
+  port 8882
+  custom_response_headers(
+    'Strict-Transport-Security' => 'meh',
+    'Cache-Control' => 'doesnt matter',
+    'Pragma' => 'irrelevant',
+    'X-Frame-Options' => 'nope'
+  )
+end
+
 Chef::Resource.send(:include, Baragon::Helpers)
 
 cookbook_file '/etc/nginx/conf.d/baragon.conf' do

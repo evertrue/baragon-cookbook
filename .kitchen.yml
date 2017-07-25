@@ -39,7 +39,6 @@ suites:
       - recipe[zookeeper_minimal]
       - recipe[nginx]
       - recipe[baragon::service]
-      - recipe[baragon::agent]
       - recipe[test_baragon_lb::default]
     includes:
       - ubuntu-16.04
