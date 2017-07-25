@@ -16,7 +16,7 @@ shared_examples_for 'default installation' do
     describe '#content' do
       subject { super().content }
       it { is_expected.to include 'upstream baragon_default_{{{service.serviceId}}}' }
-      it { is_expected.to match 'sessionTimeoutMillis: 50000' }
+      it { is_expected.to match 'sessionTimeoutMillis: 60000' }
       it { is_expected.to_not match '!ruby/hash:Chef::Node::Immutable' }
     end
   end
