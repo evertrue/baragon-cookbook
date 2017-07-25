@@ -51,9 +51,16 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
   proxy_set_header X-RealIP $remote_addr;
   proxy_set_header X-Scheme $scheme;
   proxy_set_header X-Request-Start "${msec}";
-  add_header Strict-Transport-Security $strict_transport_security_custom_header always;
-  add_header Cache-Control $cache_control_custom_header always;
-  add_header Pragma $pragma_custom_header always;
+
+  <%
+    if custom_response_headers
+      custom_response_headers.each do |header, value|
+  %>
+  add_header <%= header %> $<%= header.downcase.gsub('-', '_') %>_custom_header always;
+  <%
+      end
+    end
+  %>
 
   {{#if service.options.nginxProxyPassOverride}}
   proxy_pass http://{{{service.options.nginxProxyPassOverride}}};

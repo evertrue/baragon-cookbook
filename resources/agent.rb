@@ -23,6 +23,7 @@ property :group, String, name_attribute: true
 property :port, Integer, required: true
 property :config, Hash
 property :templates, Array
+property :custom_response_headers, Hash
 
 action :create do
   run_context.include_recipe 'baragon::common'
