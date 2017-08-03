@@ -6,6 +6,7 @@ baragon_agent 'default' do
     'Pragma' => 'irrelevant',
     'X-Frame-Options' => 'nope'
   )
+  cors_domains %w(app.test.local)
 end
 
 Chef::Resource.send(:include, Baragon::Helpers)

@@ -29,11 +29,28 @@ describe 'Baragon agent' do
       end
     end
 
-    describe 'HTTP response' do
+    describe 'HTTP GET response' do
       custom_response_headers.each do |header, value|
         it "return header #{header} with value \"#{value}\"" do
           expect(
             Net::HTTP.new('localhost', 8443).get(
+              '/testbasepath1/', 'Host' => 'test.local'
+            )[header.downcase]
+          ).to eq value
+        end
+      end
+    end
+
+    describe 'HTTP OPTIONS response' do
+      # Test for CORS pre-flight headers
+      {
+        'Access-Control-Max-Age' => '1728000',
+        'Content-Type' => 'text/plain charset=UTF-8',
+        'Content-Length' => '0'
+      }.each do |header, value|
+        it "return header #{header} with value \"#{value}\"" do
+          expect(
+            Net::HTTP.new('localhost', 8443).options(
               '/testbasepath1/', 'Host' => 'test.local'
             )[header.downcase]
           ).to eq value

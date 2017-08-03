@@ -62,6 +62,21 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
     end
   %>
 
+  <% if cors_domains %>
+  if ($DO_CORS = 'true') {
+    add_header 'Access-Control-Allow-Origin' "$http_origin" always;
+    add_header 'Access-Control-Allow-Credentials' 'true' always;
+  }
+
+  if ($request_method = 'OPTIONS') {
+    # Tell client that this pre-flight info is valid for 20 days
+    add_header 'Access-Control-Max-Age' 1728000 always;
+    add_header 'Content-Type' 'text/plain charset=UTF-8' always;
+    add_header 'Content-Length' 0 always;
+    return 204;
+  }
+
+  <% end %>
   {{#if service.options.nginxProxyPassOverride}}
   proxy_pass http://{{{service.options.nginxProxyPassOverride}}};
   {{else}}
