@@ -56,6 +56,50 @@ describe 'Baragon agent' do
           ).to eq value
         end
       end
+
+      describe 'with valid origin' do
+        it 'return Access-Control-Allow-Origin header w/o port' do
+          expect(
+            Net::HTTP.new('localhost', 8443).options(
+              '/testbasepath1/',
+              'Host' => 'test.local',
+              'Origin' => 'https://app.test.local/foobar'
+            )['Access-Control-Allow-Origin']
+          ).to eq 'https://app.test.local/foobar'
+        end
+
+        it 'return Access-Control-Allow-Origin header w/port' do
+          expect(
+            Net::HTTP.new('localhost', 8443).options(
+              '/testbasepath1/',
+              'Host' => 'test.local',
+              'Origin' => 'https://app.test.local/foobar'
+            )['Access-Control-Allow-Origin']
+          ).to eq 'https://app.test.local:8080/foobar'
+        end
+
+        it 'return Access-Control-Allow-Origin header w/o path' do
+          expect(
+            Net::HTTP.new('localhost', 8443).options(
+              '/testbasepath1/',
+              'Host' => 'test.local',
+              'Origin' => 'https://app.test.local/foobar'
+            )['Access-Control-Allow-Origin']
+          ).to eq 'https://app.test.local'
+        end
+      end
+
+      describe 'with invalid origin' do
+        it "return no Access-Control-Allow-Origin header" do
+          expect(
+            Net::HTTP.new('localhost', 8443).options(
+              '/testbasepath1/',
+              'Host' => 'test.local',
+              'Origin' => 'https://invalid.origin/foobar'
+            )['Access-Control-Allow-Origin']
+          ).to eq nil
+        end
+      end
     end
 
     describe file '/tmp/default/upstreams/tk-test-service.conf' do
