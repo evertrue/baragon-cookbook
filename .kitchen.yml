@@ -42,6 +42,9 @@ suites:
       - recipe[test_baragon_lb::default]
     includes:
       - ubuntu-16.04
+    attributes:
+      nginx:
+        package_name: nginx-extras
   # We keep this service-only suite around so that we can test the service on 14.04 (the agent
   # recipe no longer supports < 16.04)
   - name: service-only
