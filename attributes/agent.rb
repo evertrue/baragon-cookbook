@@ -64,12 +64,14 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
 
   <% if cors_regexp %>
   header_filter_by_lua_block {
-    local cors_regexp = [[<%= cors_regexp %>]]
-    local m, err = ngx.re.match(ngx.var.http_origin, cors_regexp)
+    if ngx.var.http_origin then
+      local cors_regexp = [[<%= cors_regexp %>]]
+      local m, err = ngx.re.match(ngx.var.http_origin, cors_regexp)
 
-    if m then
-      ngx.header["Access-Control-Allow-Origin"] = ngx.var.http_origin
-      ngx.header["Access-Control-Allow-Credentials"] = "true"
+      if m then
+        ngx.header["Access-Control-Allow-Origin"] = ngx.var.http_origin
+        ngx.header["Access-Control-Allow-Credentials"] = "true"
+      end
     end
 
     if ngx.req.get_method() == "OPTIONS" then
