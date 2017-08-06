@@ -34,10 +34,24 @@ describe 'Baragon agent' do
         it "return header #{header} with value \"#{value}\"" do
           expect(
             Net::HTTP.new('localhost', 8443).get(
-              '/testbasepath1/', 'Host' => 'test.local'
+              '/testbasepath1/',
+              'Host' => 'test.local',
+              'Origin' => 'https://app.test.local'
             )[header.downcase]
           ).to eq value
         end
+      end
+    end
+
+    describe 'No origin header is present' do
+      it 'return w/o Access-Control-Allow-Origin header' do
+        origin = 'https://app.test.local/foobar'
+        expect(
+          Net::HTTP.new('localhost', 8443).options(
+            '/testbasepath1/',
+            'Host' => 'test.local'
+          )['Access-Control-Allow-Origin']
+        ).to eq nil
       end
     end
 
@@ -46,12 +60,15 @@ describe 'Baragon agent' do
       {
         'Access-Control-Max-Age' => '1728000',
         'Content-Type' => 'text/plain charset=UTF-8',
-        'Content-Length' => '0'
+        'Content-Length' => '0',
+        'Access-Control-Allow-Origin' => 'https://app.test.local'
       }.each do |header, value|
         it "return header #{header} with value \"#{value}\"" do
           expect(
             Net::HTTP.new('localhost', 8443).options(
-              '/testbasepath1/', 'Host' => 'test.local'
+              '/testbasepath1/',
+              'Host' => 'test.local',
+              'Origin' => 'https://app.test.local'
             )[header.downcase]
           ).to eq value
         end
