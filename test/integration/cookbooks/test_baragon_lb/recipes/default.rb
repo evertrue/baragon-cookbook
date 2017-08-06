@@ -6,7 +6,7 @@ baragon_agent 'default' do
     'Pragma' => 'irrelevant',
     'X-Frame-Options' => 'nope'
   )
-  cors_domains %w(app.test.local)
+  cors_regexp "^https://app\\.test\\.local(:\\d{1,5})?($|/.*)"
 end
 
 Chef::Resource.send(:include, Baragon::Helpers)
