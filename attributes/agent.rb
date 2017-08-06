@@ -62,20 +62,22 @@ location {{{service.options.nginxLocationModifier}}} {{{service.serviceBasePath}
     end
   %>
 
-  <% if cors_domains %>
-  if ($DO_CORS = 'true') {
-    add_header 'Access-Control-Allow-Origin' "$http_origin" always;
-    add_header 'Access-Control-Allow-Credentials' 'true' always;
-  }
+  <% if cors_regexp %>
+  header_filter_by_lua_block {
+    local cors_regexp = [[<%= cors_regexp %>]]
+    local m, err = ngx.re.match(ngx.var.http_origin, cors_regexp)
 
-  if ($request_method = 'OPTIONS') {
-    # Tell client that this pre-flight info is valid for 20 days
-    add_header 'Access-Control-Max-Age' 1728000 always;
-    add_header 'Content-Type' 'text/plain charset=UTF-8' always;
-    add_header 'Content-Length' 0 always;
-    return 204;
-  }
+    if m then
+      ngx.header["Access-Control-Allow-Origin"] = ngx.var.http_origin
+      ngx.header["Access-Control-Allow-Credentials"] = "true"
+    end
 
+    if ngx.req.get_method() == "OPTIONS" then
+      ngx.header["Access-Control-Max-Age"] = "1728000"
+      ngx.header["Content-Type"] = "text/plain charset=UTF-8"
+      ngx.header["Content-Length"] = 0
+    end
+  }
   <% end %>
   {{#if service.options.nginxProxyPassOverride}}
   proxy_pass http://{{{service.options.nginxProxyPassOverride}}};

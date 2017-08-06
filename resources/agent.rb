@@ -24,7 +24,7 @@ property :port, Integer, required: true
 property :config, Hash
 property :templates, Array
 property :custom_response_headers, Hash
-property :cors_domains, Array
+property :cors_regexp, String
 
 action :create do
   run_context.include_recipe 'baragon::common'
