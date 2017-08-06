@@ -76,43 +76,47 @@ describe 'Baragon agent' do
 
       describe 'with valid origin' do
         it 'return Access-Control-Allow-Origin header w/o port' do
+          origin = 'https://app.test.local/foobar'
           expect(
             Net::HTTP.new('localhost', 8443).options(
               '/testbasepath1/',
               'Host' => 'test.local',
-              'Origin' => 'https://app.test.local/foobar'
+              'Origin' => origin
             )['Access-Control-Allow-Origin']
-          ).to eq 'https://app.test.local/foobar'
+          ).to eq origin
         end
 
         it 'return Access-Control-Allow-Origin header w/port' do
+          origin = 'https://app.test.local:8080/foobar'
           expect(
             Net::HTTP.new('localhost', 8443).options(
               '/testbasepath1/',
               'Host' => 'test.local',
-              'Origin' => 'https://app.test.local/foobar'
+              'Origin' => origin
             )['Access-Control-Allow-Origin']
-          ).to eq 'https://app.test.local:8080/foobar'
+          ).to eq origin
         end
 
         it 'return Access-Control-Allow-Origin header w/o path' do
+          origin = 'https://app.test.local/foobar'
           expect(
             Net::HTTP.new('localhost', 8443).options(
               '/testbasepath1/',
               'Host' => 'test.local',
-              'Origin' => 'https://app.test.local/foobar'
+              'Origin' => origin
             )['Access-Control-Allow-Origin']
-          ).to eq 'https://app.test.local'
+          ).to eq origin
         end
       end
 
       describe 'with invalid origin' do
         it "return no Access-Control-Allow-Origin header" do
+          origin = 'https://invalid.origin/foobar'
           expect(
             Net::HTTP.new('localhost', 8443).options(
               '/testbasepath1/',
               'Host' => 'test.local',
-              'Origin' => 'https://invalid.origin/foobar'
+              'Origin' => origin
             )['Access-Control-Allow-Origin']
           ).to eq nil
         end
